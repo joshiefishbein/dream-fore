@@ -89,10 +89,10 @@ const Face: FC = () => {
     const _run = async function() {
       if (!$video.current) return;
       try {
-        await faceapi.loadFaceLandmarkModel('/weights');
+        await faceapi.loadFaceLandmarkModel('./../weights');
         if (!Detect.isFaceDetectionModelLoaded()) {
           setState(State.LOADING_MODELS);
-          await Detect.getCurrentFaceDetectionNet().load('/weights');
+          await Detect.getCurrentFaceDetectionNet().load('./../weights');
           setState(State.INITIALIZING_CAMERA);
         }
       } catch (error) {

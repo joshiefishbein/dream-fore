@@ -71,13 +71,11 @@ var Face = function () {
     var $canvas = useRef(null);
     var onPlay = useCallback(function () {
         var _onPlay = function () {
-            var _a, _b;
             return __awaiter(this, void 0, void 0, function () {
                 var options, result, dims, resizedResult, mouth;
-                return __generator(this, function (_c) {
-                    switch (_c.label) {
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
                         case 0:
-                            console.log((_a = $video.current) === null || _a === void 0 ? void 0 : _a.paused, (_b = $video.current) === null || _b === void 0 ? void 0 : _b.ended, Detect.isFaceDetectionModelLoaded());
                             if (!Detect.isFaceDetectionModelLoaded()) {
                                 return [2 /*return*/, setTimeout(function () { return onPlay(); }, FRAME_RATE)];
                             }
@@ -87,7 +85,7 @@ var Face = function () {
                             options = Detect.getFaceDetectorOptions();
                             return [4 /*yield*/, faceapi.detectSingleFace($video.current, options).withFaceLandmarks()];
                         case 1:
-                            result = _c.sent();
+                            result = _a.sent();
                             if (result) {
                                 dims = faceapi.matchDimensions($canvas.current, $video.current, true);
                                 if (!!dims.width && !!dims.height) {
@@ -139,12 +137,12 @@ var Face = function () {
                             _b.label = 1;
                         case 1:
                             _b.trys.push([1, 5, , 6]);
-                            return [4 /*yield*/, faceapi.loadFaceLandmarkModel('/weights')];
+                            return [4 /*yield*/, faceapi.loadFaceLandmarkModel('./../weights')];
                         case 2:
                             _b.sent();
                             if (!!Detect.isFaceDetectionModelLoaded()) return [3 /*break*/, 4];
                             setState(State.LOADING_MODELS);
-                            return [4 /*yield*/, Detect.getCurrentFaceDetectionNet().load('/weights')];
+                            return [4 /*yield*/, Detect.getCurrentFaceDetectionNet().load('./../weights')];
                         case 3:
                             _b.sent();
                             setState(State.INITIALIZING_CAMERA);
