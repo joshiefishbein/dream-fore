@@ -1,14 +1,3 @@
-var __assign = (this && this.__assign) || function () {
-    __assign = Object.assign || function(t) {
-        for (var s, i = 1, n = arguments.length; i < n; i++) {
-            s = arguments[i];
-            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-                t[p] = s[p];
-        }
-        return t;
-    };
-    return __assign.apply(this, arguments);
-};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -45,8 +34,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useEffect, useRef, useCallback, useState } from 'react';
+import React, { useEffect, useRef, useCallback, useState } from 'react';
 import * as faceapi from 'face-api.js';
 import * as Detect from './utils/faceDetection';
 import * as Draw from './utils/draw';
@@ -63,7 +51,8 @@ var State;
 })(State || (State = {}));
 var Loader = function (_a) {
     var text = _a.text;
-    return (_jsx("div", __assign({ style: Styles.LOADER }, { children: _jsx("span", __assign({ style: Styles.TEXT }, { children: text }), void 0) }), void 0));
+    return (React.createElement("div", { style: Styles.LOADER },
+        React.createElement("span", { style: Styles.TEXT }, text)));
 };
 var Face = function () {
     var _a = useState(State.INITIALIZING_CANVAS), state = _a[0], setState = _a[1];
@@ -183,12 +172,13 @@ var Face = function () {
     useEffect(function () {
         run();
     }, [run]);
-    return (_jsxs("div", __assign({ style: Styles.WRAPPER }, { children: [state === State.INITIALIZING_CANVAS && _jsx(Loader, { text: "Initializing canvas..." }, void 0),
-            state === State.LOADING_MODELS && _jsx(Loader, { text: "Loading models..." }, void 0),
-            state === State.INITIALIZING_CAMERA && _jsx(Loader, { text: "Initializing camera..." }, void 0),
-            state === State.INITIALIZING_VIDEO && _jsx(Loader, { text: "Initializing video..." }, void 0),
-            state === State.DETECTING_LANDMARKS && _jsx(Loader, { text: "Detecting landmarks..." }, void 0),
-            _jsx("video", { style: Styles.VIDEO, ref: $video, onLoadedMetadata: onPlay, autoPlay: true, playsInline: true, muted: true }, void 0),
-            _jsx("canvas", { ref: $canvas, style: Styles.CANVAS }, void 0)] }), void 0));
+    return (React.createElement("div", { style: Styles.WRAPPER },
+        state === State.INITIALIZING_CANVAS && React.createElement(Loader, { text: "Initializing canvas..." }),
+        state === State.LOADING_MODELS && React.createElement(Loader, { text: "Loading models..." }),
+        state === State.INITIALIZING_CAMERA && React.createElement(Loader, { text: "Initializing camera..." }),
+        state === State.INITIALIZING_VIDEO && React.createElement(Loader, { text: "Initializing video..." }),
+        state === State.DETECTING_LANDMARKS && React.createElement(Loader, { text: "Detecting landmarks..." }),
+        React.createElement("video", { style: Styles.VIDEO, ref: $video, onLoadedMetadata: onPlay, autoPlay: true, playsInline: true, muted: true }),
+        React.createElement("canvas", { ref: $canvas, style: Styles.CANVAS })));
 };
 export default Face;
