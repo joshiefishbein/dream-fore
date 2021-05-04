@@ -29,7 +29,6 @@ const Face: FC = () => {
 
   const onPlay = useCallback(function() {
     const _onPlay = async function() {
-      console.log($video.current?.paused, $video.current?.ended, Detect.isFaceDetectionModelLoaded());
       if (!Detect.isFaceDetectionModelLoaded()) {
         return setTimeout(() => onPlay(), FRAME_RATE);
       }
