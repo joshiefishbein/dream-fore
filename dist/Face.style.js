@@ -26,13 +26,13 @@ var FaceStyle = {
     LOADER: {
         width: '100%',
         position: 'absolute',
-        top: 0,
-        left: 0
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
     },
     TEXT: {
         fontFamily: 'monospace',
         letterSpacing: '1px',
-        marginTop: '2rem'
     }
 };
 export default FaceStyle;
