@@ -6,7 +6,7 @@ import * as Draw from './utils/draw';
 
 import Styles from './Face.style';
 
-const FRAME_RATE = 250;
+const FRAME_RATE = 500;
 enum State {
   INITIALIZING_CANVAS,
   LOADING_MODELS,
@@ -24,6 +24,7 @@ const Loader: FC<{ text: string }> = ({ text }) => (
 
 const Face: FC = () => {
   const [state, setState] = useState<State>(State.INITIALIZING_CANVAS);
+  const [stream, setStream] = useState<MediaStream | null>(null);
   const $video = useRef<HTMLVideoElement | null>(null);
   const $canvas = useRef<HTMLCanvasElement | null>(null);
 
@@ -108,6 +109,7 @@ const Face: FC = () => {
           height: isPortrait ? 640 : 480,
         }
       });
+      setStream(stream);
       setState(State.INITIALIZING_VIDEO);
       if ('srcObject' in $video.current) {
 		    $video.current.srcObject = stream;
@@ -123,6 +125,14 @@ const Face: FC = () => {
 
   useEffect(() => {
     run();
+
+    return () => {
+      if (!stream) return;
+
+      stream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+    }
   }, [run]);
 
   return (

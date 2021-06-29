@@ -39,7 +39,7 @@ import * as faceapi from 'face-api.js';
 import * as Detect from './utils/faceDetection';
 import * as Draw from './utils/draw';
 import Styles from './Face.style';
-var FRAME_RATE = 250;
+var FRAME_RATE = 500;
 var State;
 (function (State) {
     State[State["INITIALIZING_CANVAS"] = 0] = "INITIALIZING_CANVAS";
@@ -56,6 +56,7 @@ var Loader = function (_a) {
 };
 var Face = function () {
     var _a = useState(State.INITIALIZING_CANVAS), state = _a[0], setState = _a[1];
+    var _b = useState(null), stream = _b[0], setStream = _b[1];
     var $video = useRef(null);
     var $canvas = useRef(null);
     var onPlay = useCallback(function () {
@@ -153,6 +154,7 @@ var Face = function () {
                                 }))];
                         case 7:
                             stream = _b.sent();
+                            setStream(stream);
                             setState(State.INITIALIZING_VIDEO);
                             if ('srcObject' in $video.current) {
                                 $video.current.srcObject = stream;
@@ -171,6 +173,13 @@ var Face = function () {
     }, []);
     useEffect(function () {
         run();
+        return function () {
+            if (!stream)
+                return;
+            stream.getTracks().forEach(function (track) {
+                track.stop();
+            });
+        };
     }, [run]);
     return (React.createElement("div", { style: Styles.WRAPPER },
         state === State.INITIALIZING_CANVAS && React.createElement(Loader, { text: "Initializing canvas..." }),
