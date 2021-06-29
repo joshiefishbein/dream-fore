@@ -8,6 +8,7 @@ import Styles from './Face.style';
 
 const FRAME_RATE = 500;
 enum State {
+  IDLE,
   INITIALIZING_CANVAS,
   LOADING_MODELS,
   INITIALIZING_CAMERA,
@@ -23,8 +24,7 @@ const Loader: FC<{ text: string }> = ({ text }) => (
 );
 
 const Face: FC = () => {
-  const [state, setState] = useState<State>(State.INITIALIZING_CANVAS);
-  const [stream, setStream] = useState<MediaStream | null>(null);
+  const [state, setState] = useState<State>(State.IDLE);
   const $video = useRef<HTMLVideoElement | null>(null);
   const $canvas = useRef<HTMLCanvasElement | null>(null);
 
@@ -87,6 +87,7 @@ const Face: FC = () => {
   }, [$video, $canvas, state]);
 
   const run = useCallback(function() {
+    setState(State.INITIALIZING_CANVAS);
     const _run = async function() {
       if (!$video.current) return;
       try {
@@ -109,7 +110,6 @@ const Face: FC = () => {
           height: isPortrait ? 640 : 480,
         }
       });
-      setStream(stream);
       setState(State.INITIALIZING_VIDEO);
       if ('srcObject' in $video.current) {
 		    $video.current.srcObject = stream;
@@ -121,19 +121,19 @@ const Face: FC = () => {
     }
 
     _run();
-  }, [])
+  }, []);
 
   useEffect(() => {
     run();
-
-    return () => {
-      if (!stream) return;
-
-      stream.getTracks().forEach(function(track) {
-        track.stop();
-      });
-    }
+    console.log(`~~ [Initialized] Dream Fore v1.0.19 ~~`);
   }, [run]);
+
+  useEffect(() => {
+    return () => {
+      // @ts-ignore
+      $video?.current?.srcObject?.getTracks().forEach(track => track.stop());
+    }
+  }, []);
 
   return (
     <div style={Styles.WRAPPER}>

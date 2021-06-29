@@ -42,12 +42,13 @@ import Styles from './Face.style';
 var FRAME_RATE = 500;
 var State;
 (function (State) {
-    State[State["INITIALIZING_CANVAS"] = 0] = "INITIALIZING_CANVAS";
-    State[State["LOADING_MODELS"] = 1] = "LOADING_MODELS";
-    State[State["INITIALIZING_CAMERA"] = 2] = "INITIALIZING_CAMERA";
-    State[State["INITIALIZING_VIDEO"] = 3] = "INITIALIZING_VIDEO";
-    State[State["DETECTING_LANDMARKS"] = 4] = "DETECTING_LANDMARKS";
-    State[State["ACTIVE"] = 5] = "ACTIVE";
+    State[State["IDLE"] = 0] = "IDLE";
+    State[State["INITIALIZING_CANVAS"] = 1] = "INITIALIZING_CANVAS";
+    State[State["LOADING_MODELS"] = 2] = "LOADING_MODELS";
+    State[State["INITIALIZING_CAMERA"] = 3] = "INITIALIZING_CAMERA";
+    State[State["INITIALIZING_VIDEO"] = 4] = "INITIALIZING_VIDEO";
+    State[State["DETECTING_LANDMARKS"] = 5] = "DETECTING_LANDMARKS";
+    State[State["ACTIVE"] = 6] = "ACTIVE";
 })(State || (State = {}));
 var Loader = function (_a) {
     var text = _a.text;
@@ -55,8 +56,7 @@ var Loader = function (_a) {
         React.createElement("span", { style: Styles.TEXT }, text)));
 };
 var Face = function () {
-    var _a = useState(State.INITIALIZING_CANVAS), state = _a[0], setState = _a[1];
-    var _b = useState(null), stream = _b[0], setStream = _b[1];
+    var _a = useState(State.IDLE), state = _a[0], setState = _a[1];
     var $video = useRef(null);
     var $canvas = useRef(null);
     var onPlay = useCallback(function () {
@@ -115,6 +115,7 @@ var Face = function () {
         _onPlay();
     }, [$video, $canvas, state]);
     var run = useCallback(function () {
+        setState(State.INITIALIZING_CANVAS);
         var _run = function () {
             var _a;
             return __awaiter(this, void 0, void 0, function () {
@@ -154,7 +155,6 @@ var Face = function () {
                                 }))];
                         case 7:
                             stream = _b.sent();
-                            setStream(stream);
                             setState(State.INITIALIZING_VIDEO);
                             if ('srcObject' in $video.current) {
                                 $video.current.srcObject = stream;
@@ -173,14 +173,15 @@ var Face = function () {
     }, []);
     useEffect(function () {
         run();
-        return function () {
-            if (!stream)
-                return;
-            stream.getTracks().forEach(function (track) {
-                track.stop();
-            });
-        };
+        console.log("~~ [Initialized] Dream Fore v1.0.19 ~~");
     }, [run]);
+    useEffect(function () {
+        return function () {
+            var _a, _b;
+            // @ts-ignore
+            (_b = (_a = $video === null || $video === void 0 ? void 0 : $video.current) === null || _a === void 0 ? void 0 : _a.srcObject) === null || _b === void 0 ? void 0 : _b.getTracks().forEach(function (track) { return track.stop(); });
+        };
+    }, []);
     return (React.createElement("div", { style: Styles.WRAPPER },
         state === State.INITIALIZING_CANVAS && React.createElement(Loader, { text: "Initializing canvas..." }),
         state === State.LOADING_MODELS && React.createElement(Loader, { text: "Loading models..." }),
